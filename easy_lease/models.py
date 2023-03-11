@@ -1,4 +1,5 @@
 from django.db import models
+from datetime import date
 
 
 class Tenant(models.Model):
@@ -10,6 +11,11 @@ class Tenant(models.Model):
     tenant_permanent_address = models.CharField(max_length=500)
     tenant_mobile_number = models.CharField(max_length=12)
     tenant_description = models.CharField(max_length=500)
+
+    def get_age(self):
+        today = date.today()
+        return today.year - self.tenant_date_of_birth.year - (
+                    (today.month, today.day) < (self.tenant_date_of_birth.month, self.tenant_date_of_birth.day))
 
     def __str__(self):
         return self.tenant_first_name + " " + self.tenant_last_name
@@ -53,6 +59,3 @@ class Payment(models.Model):
     payment_due_date = models.DateField()
     payment_partial = models.BooleanField()
     payment_paid = models.BooleanField()
-
-
-
